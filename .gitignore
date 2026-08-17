@@ -2,3 +2,5 @@ venv/
 .venv/
 __pycache__/
 *.pyc
+
+*chrome_langchain_db
