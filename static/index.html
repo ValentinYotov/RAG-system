@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pizza Review Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <span class="brand-icon">🍕</span>
+          <div>
+            <h1>Pizza Review Assistant</h1>
+            <p>Ask anything about the restaurant — powered by local reviews</p>
+          </div>
+        </div>
+        <button class="btn-ghost" id="clearBtn" type="button" title="Clear chat">Clear chat</button>
+      </div>
+    </header>
+
+    <main class="chat" id="chat">
+      <div class="welcome" id="welcome">
+        <h2>What would you like to know?</h2>
+        <p>Try one of these to get started:</p>
+        <div class="suggestions">
+          <button class="suggestion" type="button">How is the gluten-free pizza?</button>
+          <button class="suggestion" type="button">What do people say about delivery?</button>
+          <button class="suggestion" type="button">Is it good for families?</button>
+          <button class="suggestion" type="button">What are the best-rated items?</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="composer">
+      <form id="chatForm" class="composer-form">
+        <textarea
+          id="messageInput"
+          rows="1"
+          placeholder="Ask about the restaurant..."
+          autocomplete="off"
+        ></textarea>
+        <button class="btn-send" id="sendBtn" type="submit" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </form>
+      <p class="hint">Running locally with Ollama · Answers are based on customer reviews</p>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
