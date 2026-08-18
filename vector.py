@@ -1,37 +1,108 @@
-from langchain_ollama import OllamaEmbeddings
+import json
+import os
+
+import pandas as pd
+from docx import Document as DocxDocument
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
-import os
-import pandas as pd
+from langchain_ollama import OllamaEmbeddings
 
-df = pd.read_csv("realistic_restaurant_reviews.csv")
+DATA_DIR = "data"
+DB_LOCATION = "./chrome_langchain_db"
+COLLECTION_NAME = "restaurant_reviews"
+
 embeddings = OllamaEmbeddings(model="mxbai-embed-large")
 
-db_location = "./chrome_langchain_db"
-add_documents = not os.path.exists(db_location)
 
-if add_documents:
-    documents = []
-    ids = []
-    
-    for i, row in df.iterrows():
-        document = Document(
-            page_content=row["Title"] + " " + row["Review"],
-            metadata={"rating": row["Rating"], "date": row["Date"]},
-            id=str(i)
+def load_restaurant_text(path: str) -> str:
+    with open(path, "rb") as restaurant_file:
+        if restaurant_file.read(2) == b"PK":
+            docx_file = DocxDocument(path)
+            return "\n".join(
+                paragraph.text.strip()
+                for paragraph in docx_file.paragraphs
+                if paragraph.text.strip()
+            )
+
+    with open(path, encoding="utf-8") as restaurant_file:
+        return restaurant_file.read().strip()
+
+
+def load_documents() -> tuple[list[Document], list[str]]:
+    documents: list[Document] = []
+    ids: list[str] = []
+
+    reviews = pd.read_csv(os.path.join(DATA_DIR, "reviews.csv"))
+    for i, row in reviews.iterrows():
+        documents.append(
+            Document(
+                page_content=f"{row['Title']}. {row['Review']}",
+                metadata={
+                    "source": "reviews",
+                    "rating": row["Rating"],
+                    "date": row["Date"],
+                },
+            )
         )
         ids.append(str(i))
-        documents.append(document)
-        
-vector_store = Chroma(
-    collection_name="restaurant_reviews",
-    persist_directory=db_location,
-    embedding_function=embeddings
-)
 
-if add_documents:
-    vector_store.add_documents(documents=documents, ids=ids)
-    
-retriever = vector_store.as_retriever(
-    search_kwargs={"k": 5}
-)
+    restaurant_text = load_restaurant_text(os.path.join(DATA_DIR, "restaurant.docx"))
+    documents.append(
+        Document(
+            page_content=restaurant_text,
+            metadata={"source": "restaurant"},
+        )
+    )
+    ids.append("restaurant")
+
+    menu_path = os.path.join(DATA_DIR, "menu.json")
+    with open(menu_path, encoding="utf-8") as menu_file:
+        menu_items = json.load(menu_file)
+
+    for i, item in enumerate(menu_items):
+        ingredients = ", ".join(item["ingredients"])
+        documents.append(
+            Document(
+                page_content=(
+                    f"{item['name']} ({item['size']}) - {item['price']} EUR. "
+                    f"Ingredients: {ingredients}"
+                ),
+                metadata={
+                    "source": "menu",
+                    "name": item["name"],
+                    "price": item["price"],
+                },
+            )
+        )
+        ids.append(f"menu-{i}")
+
+    return documents, ids
+
+
+def sync_vector_store() -> Chroma:
+    vector_store = Chroma(
+        collection_name=COLLECTION_NAME,
+        persist_directory=DB_LOCATION,
+        embedding_function=embeddings,
+    )
+
+    documents, ids = load_documents()
+    existing_ids = set(vector_store.get()["ids"])
+    new_documents = []
+    new_ids = []
+
+    for document, doc_id in zip(documents, ids):
+        if doc_id not in existing_ids:
+            new_documents.append(document)
+            new_ids.append(doc_id)
+
+    if new_documents:
+        vector_store.add_documents(documents=new_documents, ids=new_ids)
+        print(f"Added {len(new_documents)} new documents to the vector store.")
+
+    return vector_store
+
+
+vector_store = sync_vector_store()
+
+retriever = vector_store.as_retriever(search_kwargs={"k": 5})

@@ -2,5 +2,6 @@ langchain
 langchain-ollama
 langchain-chroma
 pandas
+python-docx
 fastapi
 uvicorn[standard]
