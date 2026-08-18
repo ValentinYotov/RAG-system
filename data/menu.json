@@ -1,0 +1,146 @@
+[
+    {
+      "name": "Margherita",
+      "size": "30 cm",
+      "price": 10.50,
+      "ingredients": ["tomato sauce", "mozzarella", "fresh basil", "olive oil"]
+    },
+    {
+      "name": "Pepperoni",
+      "size": "30 cm",
+      "price": 12.50,
+      "ingredients": ["tomato sauce", "mozzarella", "pepperoni", "oregano"]
+    },
+    {
+      "name": "Four Cheese",
+      "size": "30 cm",
+      "price": 13.00,
+      "ingredients": ["mozzarella", "gorgonzola", "parmesan", "fontina", "olive oil"]
+    },
+    {
+      "name": "Prosciutto e Funghi",
+      "size": "30 cm",
+      "price": 13.50,
+      "ingredients": ["tomato sauce", "mozzarella", "prosciutto", "mushrooms", "oregano"]
+    },
+    {
+      "name": "Hawaiian",
+      "size": "30 cm",
+      "price": 12.00,
+      "ingredients": ["tomato sauce", "mozzarella", "ham", "pineapple"]
+    },
+    {
+      "name": "BBQ Chicken",
+      "size": "30 cm",
+      "price": 14.00,
+      "ingredients": ["mozzarella", "grilled chicken", "red onion", "BBQ sauce", "sweet corn"]
+    },
+    {
+      "name": "Vegetarian",
+      "size": "30 cm",
+      "price": 11.50,
+      "ingredients": ["tomato sauce", "mozzarella", "bell peppers", "mushrooms", "red onion", "olives", "tomatoes"]
+    },
+    {
+      "name": "Diavola",
+      "size": "30 cm",
+      "price": 13.50,
+      "ingredients": ["tomato sauce", "mozzarella", "spicy salami", "chili peppers", "oregano"]
+    },
+    {
+      "name": "Carbonara Pizza",
+      "size": "30 cm",
+      "price": 14.50,
+      "ingredients": ["mozzarella", "pancetta", "egg", "parmesan", "black pepper", "cream"]
+    },
+    {
+      "name": "Truffle Mushroom",
+      "size": "30 cm",
+      "price": 16.00,
+      "ingredients": ["mozzarella", "mushrooms", "truffle oil", "parmesan", "fresh parsley"]
+    },
+    {
+      "name": "Margherita",
+      "size": "40 cm",
+      "price": 15.00,
+      "ingredients": ["tomato sauce", "mozzarella", "fresh basil", "olive oil"]
+    },
+    {
+      "name": "Pepperoni",
+      "size": "40 cm",
+      "price": 17.50,
+      "ingredients": ["tomato sauce", "mozzarella", "pepperoni", "oregano"]
+    },
+    {
+      "name": "Four Cheese",
+      "size": "40 cm",
+      "price": 18.00,
+      "ingredients": ["mozzarella", "gorgonzola", "parmesan", "fontina", "olive oil"]
+    },
+    {
+      "name": "Prosciutto e Funghi",
+      "size": "40 cm",
+      "price": 18.50,
+      "ingredients": ["tomato sauce", "mozzarella", "prosciutto", "mushrooms", "oregano"]
+    },
+    {
+      "name": "BBQ Chicken",
+      "size": "40 cm",
+      "price": 19.00,
+      "ingredients": ["mozzarella", "grilled chicken", "red onion", "BBQ sauce", "sweet corn"]
+    },
+    {
+      "name": "Diavola",
+      "size": "40 cm",
+      "price": 18.50,
+      "ingredients": ["tomato sauce", "mozzarella", "spicy salami", "chili peppers", "oregano"]
+    },
+    {
+      "name": "Garlic Bread",
+      "size": "25 cm",
+      "price": 5.00,
+      "ingredients": ["pizza dough", "garlic butter", "parsley", "parmesan"]
+    },
+    {
+      "name": "Mozzarella Sticks",
+      "size": "200 g",
+      "price": 6.50,
+      "ingredients": ["mozzarella", "breadcrumbs", "flour", "egg"]
+    },
+    {
+      "name": "Chicken Wings",
+      "size": "300 g",
+      "price": 8.00,
+      "ingredients": ["chicken wings", "BBQ sauce", "garlic", "black pepper"]
+    },
+    {
+      "name": "Caesar Salad",
+      "size": "350 g",
+      "price": 7.50,
+      "ingredients": ["romaine lettuce", "grilled chicken", "parmesan", "croutons", "Caesar dressing"]
+    },
+    {
+      "name": "Tiramisu",
+      "size": "150 g",
+      "price": 5.50,
+      "ingredients": ["mascarpone", "ladyfingers", "coffee", "cocoa", "sugar"]
+    },
+    {
+      "name": "Chocolate Brownie",
+      "size": "150 g",
+      "price": 5.00,
+      "ingredients": ["dark chocolate", "flour", "butter", "eggs", "sugar", "cocoa"]
+    },
+    {
+      "name": "Coca-Cola",
+      "size": "500 ml",
+      "price": 2.50,
+      "ingredients": []
+    },
+    {
+      "name": "Sparkling Water",
+      "size": "500 ml",
+      "price": 1.50,
+      "ingredients": []
+    }
+  ]
