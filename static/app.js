@@ -76,7 +76,15 @@ function attachSources(messageEl, sources) {
 
     const meta = document.createElement("div");
     meta.className = "source-meta";
-    meta.textContent = `★ ${source.rating}/5 · ${source.date}`;
+    if (source.source === "menu") {
+      meta.textContent = "Menu item";
+    } else if (source.source === "restaurant") {
+      meta.textContent = "Restaurant info";
+    } else if (source.rating != null) {
+      meta.textContent = `★ ${source.rating}/5 · ${source.date || "Review"}`;
+    } else {
+      meta.textContent = source.source || "Source";
+    }
 
     const content = document.createElement("div");
     content.textContent = source.content;
@@ -98,6 +106,8 @@ function attachSources(messageEl, sources) {
   messageEl.appendChild(wrapper);
 }
 
+const CHAT_TIMEOUT_MS = 120000;
+
 async function sendMessage(text) {
   const message = text.trim();
   if (!message || isSending) return;
@@ -109,28 +119,38 @@ async function sendMessage(text) {
   input.style.height = "auto";
   createTypingIndicator();
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), CHAT_TIMEOUT_MS);
+
   try {
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message }),
+      signal: controller.signal,
     });
 
+    const data = await response.json().catch(() => ({}));
+
     if (!response.ok) {
-      throw new Error("Request failed");
+      throw new Error(data.detail || "Request failed");
     }
 
-    const data = await response.json();
     removeTypingIndicator();
     const assistantMessage = createMessage("assistant", data.answer);
     attachSources(assistantMessage, data.sources);
-  } catch {
+  } catch (error) {
     removeTypingIndicator();
+    const isTimeout = error.name === "AbortError";
     createMessage(
       "assistant",
-      "Something went wrong. Make sure Ollama is running and try again."
+      isTimeout
+        ? "The request took too long. Check that Ollama is running and try again."
+        : error.message ||
+            "Something went wrong. Make sure Ollama is running and try again."
     );
   } finally {
+    clearTimeout(timeoutId);
     isSending = false;
     sendBtn.disabled = false;
     input.focus();

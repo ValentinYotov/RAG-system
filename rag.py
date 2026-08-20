@@ -1,8 +1,9 @@
-from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
-from vector import retriever
+from langchain_ollama.llms import OllamaLLM
 
-model = OllamaLLM(model="llama3.2")
+from vector import get_retriever
+
+_chain = None
 
 template = """
 You are an expert in answering questions about a pizza restaurant.
@@ -16,7 +17,14 @@ Here is the menu: {menu}
 Here is the question to answer: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
-chain = prompt | model
+
+
+def get_chain():
+    global _chain
+    if _chain is None:
+        model = OllamaLLM(model="llama3.2", timeout=120)
+        _chain = prompt | model
+    return _chain
 
 
 def _group_context(docs) -> tuple[str, str, str]:
@@ -41,9 +49,9 @@ def _group_context(docs) -> tuple[str, str, str]:
 
 
 def ask(question: str) -> dict:
-    docs = retriever.invoke(question)
+    docs = get_retriever().invoke(question)
     reviews, restaurant, menu = _group_context(docs)
-    answer = chain.invoke(
+    answer = get_chain().invoke(
         {
             "reviews": reviews,
             "restaurant": restaurant,

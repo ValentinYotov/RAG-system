@@ -11,7 +11,7 @@ DATA_DIR = "data"
 DB_LOCATION = "./chrome_langchain_db"
 COLLECTION_NAME = "restaurant_reviews"
 
-embeddings = OllamaEmbeddings(model="mxbai-embed-large")
+_retriever = None
 
 
 def load_restaurant_text(path: str) -> str:
@@ -80,6 +80,7 @@ def load_documents() -> tuple[list[Document], list[str]]:
 
 
 def sync_vector_store() -> Chroma:
+    embeddings = OllamaEmbeddings(model="mxbai-embed-large")
     vector_store = Chroma(
         collection_name=COLLECTION_NAME,
         persist_directory=DB_LOCATION,
@@ -103,6 +104,9 @@ def sync_vector_store() -> Chroma:
     return vector_store
 
 
-vector_store = sync_vector_store()
-
-retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+def get_retriever():
+    global _retriever
+    if _retriever is None:
+        vector_store = sync_vector_store()
+        _retriever = vector_store.as_retriever(search_kwargs={"k": 5})
+    return _retriever
